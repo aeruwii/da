@@ -1,0 +1,145 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="description" content="Rukhiya Zhetibay — Integrated Business Management student portfolio."><title>Rukhiya Zhetibay — Portfolio</title><style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;1,400&family=Unbounded:wght@500;600;700&display=swap');
+:root{--p:#f48bd0;--b:#050505;--m:#b7a8b2}*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{background:var(--b);color:#fff;font-family:'DM Sans',sans-serif}a{color:inherit;text-decoration:none}nav{position:fixed;z-index:9;top:15px;left:50%;transform:translateX(-50%);width:92%;max-width:1100px;padding:11px 16px;border:1px solid #493344;border-radius:99px;background:#050505dd;backdrop-filter:blur(12px);display:flex;justify-content:space-between}.logo,.display{font-family:Unbounded,sans-serif}.logo{color:var(--p);font-size:12px}.links{display:flex;gap:20px;font-size:10px;text-transform:uppercase;letter-spacing:.1em}.links a:hover{color:var(--p)}.slide{width:92%;max-width:1180px;min-height:100vh;margin:auto;padding:100px 0 65px;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid #191319}.top{display:flex;justify-content:space-between;color:var(--p);font-size:10px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:28px}.display{text-transform:uppercase;letter-spacing:-.06em;line-height:.9}.script{font-family:'Playfair Display',serif;font-style:italic;color:var(--p);font-weight:400}.hero h1{font-size:clamp(4rem,12vw,10rem)}.hero .script{font-size:clamp(2.5rem,6vw,6rem);margin-left:8%}.name{position:absolute;right:5%;bottom:18%;font-size:clamp(2.8rem,6vw,6rem)}.name .last{display:block;margin-left:80px}.bottom,.two{display:grid;grid-template-columns:1fr 1fr;gap:55px}.bottom{margin-top:65px;max-width:900px}.copy{font-size:14px;line-height:1.55;color:#d5c8d0;max-width:540px}.copy p+p{margin-top:18px}.title{font-size:clamp(3rem,8vw,7rem)}.star{color:var(--p);font-size:60px;margin:30px 0}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{border-top:2px solid var(--p);padding-top:13px}.stat b{display:block;color:var(--p);font:600 28px Unbounded}.stat span{font-size:9px;color:var(--m);text-transform:uppercase;letter-spacing:.1em}.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:25px}.tag{border:1px solid #493344;border-radius:99px;padding:9px 12px;font-size:10px}.timeline{margin-top:35px}.item{display:grid;grid-template-columns:100px 1fr;gap:30px;padding:24px 0;border-top:1px solid #282028}.year{color:var(--p);font:10px Unbounded}.item h3{font-size:23px;margin-bottom:7px}.item p,.card p,.future p{font-size:13px;line-height:1.5;color:var(--m)}.cards,.futuregrid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:35px}.card,.future{background:#111;border:1px solid #272027;padding:28px;min-height:190px}.num{color:var(--p);font:10px Unbounded}.card h3,.future h3{font-size:23px;margin:18px 0 8px}.hike{background:var(--p);color:#050505;padding:50px;display:grid;grid-template-columns:1fr 1fr;gap:40px}.hike .script{color:#050505}.hike .big{font:600 clamp(3rem,7vw,7rem) Unbounded;line-height:1}.hike p{font-size:13px;line-height:1.5;margin-top:16px}.future small{color:var(--p);text-transform:uppercase;letter-spacing:.14em;font-size:9px}.contact h2{font-size:clamp(3.5rem,9vw,9rem)}.contact p{max-width:600px;color:var(--m);margin:28px 0;font-size:14px}.buttons{display:flex;gap:10px;flex-wrap:wrap}.btn{border:1px solid var(--p);color:var(--p);padding:11px 17px;border-radius:99px;font-size:10px;text-transform:uppercase;letter-spacing:.12em}.btn:hover{background:var(--p);color:#000}footer{width:92%;max-width:1180px;margin:auto;padding:25px 0 45px;color:#665963;font-size:9px;display:flex;justify-content:space-between;text-transform:uppercase;letter-spacing:.12em}@media(max-width:700px){.links{display:none}.slide{width:90%;padding:90px 0 50px}.name{position:static;margin-top:55px}.name .last{margin-left:45px}.bottom,.two,.hike{grid-template-columns:1fr;gap:28px}.cards,.futuregrid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.item{grid-template-columns:70px 1fr;gap:15px}.hike{padding:28px}}
+@media(max-width:430px){.stats{grid-template-columns:1fr}.top{font-size:8px}.hero h1{font-size:3.5rem}}
+
+.interest-feature{display:grid;grid-template-columns:1fr 220px;gap:40px;align-items:center;border:1px solid var(--line);padding:42px;margin-bottom:18px;background:#050505;color:#fff}
+.interest-feature h3{font-size:clamp(30px,4vw,54px);margin:10px 0 16px;line-height:1}
+.interest-feature p:not(.eyebrow){max-width:680px;color:#c8c1c8;line-height:1.65}
+.interest-number{text-align:center;border-left:1px solid #3a3039;padding-left:30px}
+.interest-number strong{display:block;font-size:100px;line-height:.8;color:#f19bd0}
+.interest-number span{display:block;margin-top:18px;text-transform:uppercase;letter-spacing:.15em;color:#c8c1c8}
+.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.goal-highlight{border-left:4px solid #f19bd0;padding:24px 28px;margin:0 0 28px;background:#faf7f9}
+.goal-highlight h3{font-size:48px;margin:7px 0}
+.goal-highlight p{margin:0;max-width:700px}
+@media(max-width:700px){.interest-feature{grid-template-columns:1fr}.interest-number{border-left:0;border-top:1px solid #3a3039;padding:25px 0 0}.mini-grid{grid-template-columns:1fr}}
+
+.eyebrow{color:#f48bd0;font-size:9px;text-transform:uppercase;letter-spacing:.18em}
+.interest-feature{display:grid;grid-template-columns:1fr 230px;gap:45px;align-items:center;border:1px solid #3b3038;padding:42px;margin-top:25px;background:#080808}
+.interest-feature h3{font-size:clamp(28px,4vw,52px);line-height:1;margin:10px 0 16px}
+.interest-feature p:not(.eyebrow){color:#c8bec7;line-height:1.6;max-width:700px;font-size:14px}
+.interest-number{text-align:center;border-left:1px solid #3b3038;padding-left:35px}
+.interest-number strong{display:block;color:#f48bd0;font:600 105px Unbounded;line-height:.8}
+.interest-number span{display:block;margin-top:18px;color:#b7a8b2;font-size:9px;text-transform:uppercase;letter-spacing:.16em}
+.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:15px}
+.three-sides{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:45px}
+.side{min-height:260px;border:1px solid #30272e;padding:30px;background:#0c0c0c;display:flex;flex-direction:column;justify-content:space-between}
+.side span,.learning-list span,.road span{color:#f48bd0;font:10px Unbounded}
+.side h3{font:600 clamp(25px,3vw,42px) Unbounded;line-height:1}
+.side p{color:#b7a8b2;font-size:12px}
+.learning-list{margin-top:35px;border-top:1px solid #30272e}
+.learning-list>div{display:grid;grid-template-columns:70px 260px 1fr;gap:25px;align-items:center;padding:23px 0;border-bottom:1px solid #30272e}
+.learning-list h3{font-size:20px}.learning-list p{font-size:12px;color:#b7a8b2}
+.goal-highlight{border-left:4px solid #f48bd0;padding:25px 28px;margin:30px 0;background:#faf7f9;color:#090909}
+.goal-highlight h3{font:600 48px Unbounded;margin:8px 0}.goal-highlight p{font-size:13px}
+.roadmap{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}
+.road{border-top:2px solid #f48bd0;background:#101010;padding:25px;min-height:180px}
+.road h3{font-size:22px;margin:15px 0 8px}.road p{font-size:12px;color:#b7a8b2;line-height:1.5}
+.future-extra{margin-top:15px;padding:25px;border:1px solid #30272e}
+.future-extra span{font-size:9px;letter-spacing:.15em;color:#f48bd0}
+.future-extra strong{font:600 30px Unbounded;display:block;margin:10px 0}.future-extra p{font-size:12px;color:#b7a8b2}
+@media(max-width:700px){.interest-feature,.three-sides,.roadmap{grid-template-columns:1fr}.mini-grid{grid-template-columns:1fr}.interest-number{border-left:0;border-top:1px solid #3b3038;padding:25px 0 0}.learning-list>div{grid-template-columns:50px 1fr}.learning-list p{grid-column:2}.side{min-height:190px}}
+</style></head><body><nav><a class="logo" href="#home">RZ.</a><div class="links"><a href="#about">About</a><a href="#education">Education</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#interests">Hobbies</a><a href="#future">Future</a><a href="#contact">Contact</a></div></nav><main>
+<section class="slide hero" id="home"><div class="top"><span>WELCOME</span><span>STUDENT PORTFOLIO</span><span>2026</span></div><h1 class="display">Portfolio</h1><div class="script">student journey</div><div class="star">✦</div><div class="name"><span class="display">Rukhiya</span><span class="script last">Zhetibay</span></div><div class="bottom"><p class="copy">Integrated Business Management student from Kazakhstan, currently studying in Busan, South Korea.</p><p class="copy">Business · Communication · Leadership · International Perspective</p></div></section>
+
+<section class="slide" id="about"><div class="top"><span>02 / ABOUT</span><span>WHO I AM</span></div><h2 class="display title">About <span class="script">Me</span></h2><div class="star">✦</div><div class="two"><div class="copy"><p>I am an Integrated Business Management student from Kazakhstan, studying at Dong-A University in Busan, South Korea.</p><p>I enjoy working with people, organizing ideas and turning creative concepts into something practical. My experiences in student leadership, volunteering and debate have helped me become more confident, adaptable and responsible.</p></div><div><div class="stats"><div class="stat"><b>95.4%</b><span>High-school GPA</span></div><div class="stat"><b>7.0</b><span>IELTS Overall</span></div><div class="stat"><b>7</b><span>Peaks Hiked</span></div></div><div class="tags"><span class="tag">Kazakh · Native</span><span class="tag">Russian · Fluent</span><span class="tag">English · Advanced</span><span class="tag">Korean · Learning</span></div></div></div></section>
+
+<section class="slide" id="education"><div class="top"><span>03 / EDUCATION</span><span>ACADEMIC FOUNDATION</span></div><h2 class="display title">My <span class="script">Education</span></h2><div class="timeline"><div class="item"><div class="year">NOW</div><div><h3>Dong-A University · Busan, South Korea</h3><p><strong>Integrated Business Management</strong><br>Building a foundation in business, management, communication, teamwork and international business.</p></div></div><div class="item"><div class="year">HIGH SCHOOL</div><div><h3>Physics–Mathematics Lyceum · Kazakhstan</h3><p><strong>GPA: 4.77 / 5.00 · 95.4%</strong><br>Developed analytical thinking, discipline, problem-solving and a strong academic foundation.</p></div></div></div></section>
+
+<section class="slide" id="experience"><div class="top"><span>04 / EXPERIENCE</span><span>LEADERSHIP & COMMUNITY</span></div><h2 class="display title">Experience <span class="script">&</span></h2><div class="cards"><article class="card"><span class="num">01</span><h3>School President</h3><p>Elected school president. Coordinated a 13-person student parliament, organized school-wide activities, charity programs and competitions, and helped bring student ideas into action.</p></article><article class="card"><span class="num">02</span><h3>Ashyq Jurek</h3><p><strong>Deputy Head of SMM.</strong> Promoted the volunteer organization through Reels, TikTok videos and social-media content to grow awareness and engagement.</p></article><article class="card"><span class="num">03</span><h3>UNICEF Volunteering</h3><p>Participated in volunteering activities connected with community engagement and social impact, gaining experience in teamwork and responsibility.</p></article><article class="card"><span class="num">04</span><h3>Debate Club</h3><p>Developed public speaking, structured argumentation, critical thinking, active listening and confidence in presenting ideas.</p></article></div></section>
+
+<section class="slide" id="projects">
+  <div class="top"><span>PROJECTS</span><span>LEARNING THROUGH PLAY</span></div>
+  <h2 class="display title">My <span class="script">Projects</span></h2>
+  <div class="cards">
+    <article class="card">
+      <span class="num">EDUCATIONAL BROWSER GAME</span>
+      <h3>Linguatown</h3>
+      <p>A colourful town for beginner Korean learners. Explore the school, library, café and park, and practise vocabulary and grammar through ten learning levels.</p>
+      <div class="tags"><span class="tag">Korean Learning</span><span class="tag">HTML · CSS · JavaScript</span></div>
+      <div class="buttons" style="margin-top:24px"><a class="btn" href="linguatown.html">Play Linguatown →</a></div>
+    </article>
+  </div>
+</section>
+
+<section class="slide" id="skills"><div class="top"><span>05 / SKILLS</span><span>TOOLS & STRENGTHS</span></div><h2 class="display title">Skills <span class="script">&</span><br>Tools</h2><div class="two" style="margin-top:45px"><div class="copy"><p>I bring a combination of business communication, leadership and creative digital skills to academic and team environments.</p><p>I am also learning programming as an additional skill and want to connect business knowledge with technology.</p></div><div class="tags"><span class="tag">Business Communication</span><span class="tag">Leadership</span><span class="tag">Public Speaking</span><span class="tag">Teamwork</span><span class="tag">Event Organization</span><span class="tag">Social Media</span><span class="tag">Content Creation</span><span class="tag">Canva</span><span class="tag">Google Workspace</span><span class="tag">Presentation</span><span class="tag">Critical Thinking</span><span class="tag">Programming & digital skills — Learning</span></div></div></section>
+
+<section class="slide" id="highlights">
+  <div class="top"><span>06 / HIGHLIGHTS</span><span>ACADEMIC & LEADERSHIP</span></div>
+  <h2 class="display title">Highlights <span class="script">&</span></h2>
+  <div class="cards">
+    <div class="card"><span class="num">01</span><h3>95.4%</h3><p>High-school GPA from a Physics–Mathematics Lyceum in Kazakhstan.</p></div>
+    <div class="card"><span class="num">02</span><h3>IELTS 7.0</h3><p>English proficiency demonstrated through an overall IELTS score of 7.0.</p></div>
+    <div class="card"><span class="num">03</span><h3>Elected President</h3><p>Elected school president and coordinator of a 13-person student parliament.</p></div>
+    <div class="card"><span class="num">04</span><h3>Ashyq Jurek</h3><p>Deputy Head of SMM, creating Reels and TikTok content to promote the organization.</p></div>
+  </div>
+</section>
+
+<section class="slide"><div class="top"><span>11 / HIKING</span><span>HOBBY · PERSONAL CHALLENGE</span></div><div class="hike"><div><h2 class="display" style="font-size:clamp(2.8rem,6vw,6rem)">7 PEAKS</h2><div class="script" style="font-size:3rem">and counting</div></div><div><div class="big">3,680 m</div><p>Big Almaty Peak · Almaty, Kazakhstan</p><p>I have hiked seven peaks around my hometown, Almaty, with Big Almaty Peak reaching 3,680 meters. Each climb has taught me endurance, preparation and patience.</p></div></div><p class="copy" style="margin-top:24px">Next challenge: some of the highest and most demanding peaks in the future.</p></section>
+
+<section class="slide" id="interests">
+  <div class="top"><span>07 / OUTSIDE THE CLASSROOM</span><span>HOBBIES & INTERESTS</span></div>
+  <h2 class="display title">Outside <span class="script">the Classroom</span></h2>
+  <div class="star">✦</div>
+
+  <div class="interest-feature">
+    <div>
+      <p class="eyebrow">MY MAIN HOBBY</p>
+      <h3>Hiking is more than a hobby for me.</h3>
+      <p>I have hiked 7 peaks around Almaty, including Big Almaty Peak at 3,680 m. I enjoy the challenge of long climbs, discovering new places and pushing myself beyond what feels comfortable.</p>
+    </div>
+    <div class="interest-number"><strong>7</strong><span>peaks hiked</span></div>
+  </div>
+
+  <div class="mini-grid">
+    <div class="card"><span class="num">HOBBY</span><h3>Hiking</h3><p>Mountains, endurance, preparation and new challenges.</p></div>
+    <div class="card"><span class="num">HOBBY</span><h3>Guitar</h3><p>A creative activity I enjoy outside university and work.</p></div>
+    <div class="card"><span class="num">INTEREST</span><h3>Languages</h3><p>Kazakh, Russian, English and continuing to learn Korean.</p></div>
+  </div>
+</section>
+<section class="slide" id="three-sides">
+  <div class="top"><span>08 / MY THREE SIDES</span><span>WHAT DESCRIBES ME</span></div>
+  <h2 class="display title">Three <span class="script">Sides</span></h2>
+  <div class="three-sides">
+    <div class="side"><span>01</span><h3>BUSINESS</h3><p>Communication · Management · Leadership</p></div>
+    <div class="side"><span>02</span><h3>CREATIVE</h3><p>Guitar · Content · Social Media</p></div>
+    <div class="side"><span>03</span><h3>ADVENTUROUS</h3><p>Hiking · Mountains · New Experiences</p></div>
+  </div>
+</section>
+<section class="slide" id="learning">
+  <div class="top"><span>09 / CURRENTLY LEARNING</span><span>GROWTH</span></div>
+  <h2 class="display title">Currently <span class="script">Learning</span></h2>
+  <div class="learning-list">
+    <div><span>01</span><h3>Korean</h3><p>Working toward advanced Korean proficiency.</p></div>
+    <div><span>02</span><h3>Business Communication</h3><p>Developing clearer professional communication and presentation skills.</p></div>
+    <div><span>03</span><h3>Programming</h3><p>Learning programming as an additional skill alongside business.</p></div>
+    <div><span>04</span><h3>Business & Management</h3><p>Building a stronger foundation through my university studies.</p></div>
+  </div>
+</section>
+<section class="slide" id="future">
+  <div class="top"><span>10 / FUTURE</span><span>WHAT'S NEXT</span></div>
+  <h2 class="display title">Future <span class="script">Goals</span></h2>
+
+  <div class="goal-highlight">
+    <span class="eyebrow">LANGUAGE GOAL</span>
+    <h3>TOPIK 6</h3>
+    <p>My goal is to earn a TOPIK Level 6 certificate by the end of my university studies.</p>
+  </div>
+
+  <div class="roadmap">
+    <div class="road"><span>NOW</span><h3>Integrated Business Management</h3><p>Build a strong academic and professional foundation at Dong-A University.</p></div>
+    <div class="road"><span>NEXT</span><h3>TOPIK 6 + Programming</h3><p>Reach an advanced level of Korean and develop an additional technical skill.</p></div>
+    <div class="road"><span>MASTER'S</span><h3>American University</h3><p>Pursue a master’s degree in the United States and gain a broader international perspective.</p></div>
+    <div class="road"><span>FUTURE</span><h3>University Professor</h3><p>Become a university professor while continuing to grow professionally in business.</p></div>
+  </div>
+
+  <div class="future-extra">
+    <span>PERSONAL GOAL</span>
+    <strong>Higher Peaks</strong>
+    <p>Continue challenging myself with some of the highest and most demanding mountains.</p>
+  </div>
+</section>
+
+<section class="slide contact" id="contact"><div class="top"><span>12 / CONTACT</span><span>LET'S CONNECT</span></div><h2 class="display">Thank <span class="script">you</span><br>for viewing</h2><p>I’m interested in internships, student opportunities, international projects and experiences where I can learn, contribute and grow.</p><div class="buttons"><a class="btn" href="mailto:sanruxiya@gmail.com">Email me</a></div><div class="star">✦</div></section>
+</main><footer><span>© 2026 Rukhiya Zhetibay</span><span>Single-file portfolio · GitHub Pages</span></footer></body></html>
