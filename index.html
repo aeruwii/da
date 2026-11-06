@@ -40,7 +40,20 @@
 .future-extra span{font-size:9px;letter-spacing:.15em;color:#f48bd0}
 .future-extra strong{font:600 30px Unbounded;display:block;margin:10px 0}.future-extra p{font-size:12px;color:#b7a8b2}
 @media(max-width:700px){.interest-feature,.three-sides,.roadmap{grid-template-columns:1fr}.mini-grid{grid-template-columns:1fr}.interest-number{border-left:0;border-top:1px solid #3b3038;padding:25px 0 0}.learning-list>div{grid-template-columns:50px 1fr}.learning-list p{grid-column:2}.side{min-height:190px}}
-</style></head><body><nav><a class="logo" href="#home">RZ.</a><div class="links"><a href="#about">About</a><a href="#education">Education</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#interests">Hobbies</a><a href="#future">Future</a><a href="#contact">Contact</a></div></nav><main>
+#data-detectives .title{font-size:clamp(2.5rem,7.6vw,6.8rem);line-height:1.04}
+#data-detectives .script{text-transform:none}
+.dd-resources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:clamp(28px,5vw,60px)}
+.dd-resource{position:relative;display:grid;align-content:end;gap:7px;min-height:154px;padding:24px 54px 24px 24px;border:1px solid #785969;color:#fff;background:#191317;border-radius:16px}
+.dd-resource:first-child{background:var(--p);color:#180d13;border-color:var(--p)}
+.dd-resource strong{font-size:clamp(20px,2vw,28px);line-height:1.15}
+.dd-resource span{font-size:14px;line-height:1.45}
+.dd-resource b{position:absolute;top:16px;right:18px;font-size:24px}
+.dd-resource:hover strong,.dd-resource:focus-visible strong{text-decoration:underline}
+@media(max-width:650px){.dd-resources{grid-template-columns:1fr}.dd-resource{min-height:116px}}
+
+.dd-link{color:var(--p);font-size:12px;margin-left:auto;padding:8px}
+@media(min-width:701px){.dd-link{display:none}}
+</style></head><body><nav><a class="logo" href="#home">RZ.</a><div class="links"><a href="#about">About</a><a href="#education">Education</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#data-detectives">Data Detectives</a><a href="#skills">Skills</a><a href="#interests">Hobbies</a><a href="#future">Future</a><a href="#contact">Contact</a></div><a class="dd-link" href="#data-detectives">Data Detectives</a></nav><main>
 <section class="slide hero" id="home"><div class="top"><span>WELCOME</span><span>STUDENT PORTFOLIO</span><span>2026</span></div><h1 class="display">Portfolio</h1><div class="script">student journey</div><div class="star">✦</div><div class="name"><span class="display">Rukhiya</span><span class="script last">Zhetibay</span></div><div class="bottom"><p class="copy">Integrated Business Management student from Kazakhstan, currently studying in Busan, South Korea.</p><p class="copy">Business · Communication · Leadership · International Perspective</p></div></section>
 
 <section class="slide" id="about"><div class="top"><span>02 / ABOUT</span><span>WHO I AM</span></div><h2 class="display title">About <span class="script">Me</span></h2><div class="star">✦</div><div class="two"><div class="copy"><p>I am an Integrated Business Management student from Kazakhstan, studying at Dong-A University in Busan, South Korea.</p><p>I enjoy working with people, organizing ideas and turning creative concepts into something practical. My experiences in student leadership, volunteering and debate have helped me become more confident, adaptable and responsible.</p></div><div><div class="stats"><div class="stat"><b>95.4%</b><span>High-school GPA</span></div><div class="stat"><b>7.0</b><span>IELTS Overall</span></div><div class="stat"><b>7</b><span>Peaks Hiked</span></div></div><div class="tags"><span class="tag">Kazakh · Native</span><span class="tag">Russian · Fluent</span><span class="tag">English · Advanced</span><span class="tag">Korean · Learning</span></div></div></div></section>
@@ -60,6 +73,18 @@
       <div class="tags"><span class="tag">Korean Learning</span><span class="tag">HTML · CSS · JavaScript</span></div>
       <div class="buttons" style="margin-top:24px"><a class="btn" href="linguatown.html">Play Linguatown →</a><a class="btn" href="https://docs.google.com/document/d/1m2lv-jjjac0J7BoZIMmZ61o-THsKqtpmAY-ktlPD0lA/edit?usp=drivesdk" target="_blank" rel="noopener noreferrer">Game Design Document ↗</a></div>
     </article>
+  </div>
+</section>
+<section class="slide" id="data-detectives" aria-labelledby="dd-title">
+  <div class="top"><span>Data analytics</span></div>
+  <h2 class="display title" id="dd-title">Data Detectives<br><span class="script">Project</span></h2>
+  <div class="dd-resources">
+    <a class="dd-resource" href="./data.html">
+      <strong>CSV Workbench</strong><span>Explore records, review changes and compare statistics.</span><b aria-hidden="true">↗</b>
+    </a>
+    <a class="dd-resource" href="https://drive.google.com/drive/folders/1RBXkCQ9p-fXGHlvdOC7mDTMGo8zCYg_A">
+      <strong>Google Drive folder</strong><span>View the project files and assignment documentation.</span><b aria-hidden="true">↗</b>
+    </a>
   </div>
 </section>
 
@@ -140,13 +165,6 @@
     <p>Continue challenging myself with some of the highest and most demanding mountains.</p>
   </div>
 </section>
-<section class="slide" id="data-detectives">
-  <h2>Data Detectives Project</h2>
-  <ul>
-    <li><a href="./data.html">CSV Workbench</a></li>
-    <li><a href="https://drive.google.com/drive/folders/1RBXkCQ9p-fXGHlvdOC7mDTMGo8zCYg_A">Data Detectives Google Drive Folder</a></li>
-  </ul>
-</section></body></html>
 
 <section class="slide contact" id="contact"><div class="top"><span>12 / CONTACT</span><span>LET'S CONNECT</span></div><h2 class="display">Thank <span class="script">you</span><br>for viewing</h2><p>I’m interested in internships, student opportunities, international projects and experiences where I can learn, contribute and grow.</p><div class="buttons"><a class="btn" href="mailto:sanruxiya@gmail.com">Email me</a></div><div class="star">✦</div></section>
-</main><footer><span>© 2026 Rukhiya Zhetibay</span><span>Single-file portfolio · GitHub Pages</span></footer>
+</main><footer><span>© 2026 Rukhiya Zhetibay</span><span>Single-file portfolio · GitHub Pages</span></footer></body></html>
