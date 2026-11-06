@@ -1,0 +1,89 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Data Detectives · CSV Workbench</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f4ed;color:#172e31;font:16px/1.5 system-ui}main{max-width:1150px;margin:auto;padding:32px 4vw}header{background:#173b3c;color:white;padding:38px;border-radius:18px}h1{font:clamp(36px,6vw,64px)/1.05 Georgia;margin:8px 0 16px}h2{font:30px Georgia;margin:0 0 12px}section{background:white;padding:22px;margin:16px 0;border:1px solid #d4dfd9;border-radius:14px}input,select,button,textarea{font:inherit;max-width:100%;padding:7px 10px;border:1px solid #9baea7;border-radius:6px}button{background:#e1eee4;color:#163c35;cursor:pointer}button:hover{background:#c7e0ce}label{display:inline-grid;gap:3px;margin:3px 8px 8px 0;font-size:14px}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:8px;border-bottom:1px solid #dce3de;vertical-align:top;white-space:pre-wrap;overflow-wrap:anywhere}th{background:#eef3ec}.scroll{overflow:auto;max-height:55vh}#grid td{min-width:95px}.bar{background:#348070;height:14px;border-radius:3px;display:inline-block}small{color:#49665d}dialog{width:min(620px,94vw);border:1px solid #bccbc6;border-radius:12px}textarea{display:block;width:100%;min-height:75px}#msg{color:#ffd898}button:disabled{opacity:.55}
+</style><main><header>Data Detectives / TGF<h1>CSV Workbench</h1><p>Open a CSV to inspect records, review changes and compare statistics.</p><input id="file" type="file" accept=".csv,text/csv" aria-label="Open CSV"> <button id="demo">Try sample data</button><div id="msg" role="status"></div></header>
+<div id="work" hidden><section><h2>Records</h2><p id="source"></p><label>Search all fields<input id="query" type="search"></label><label>Show<select id="filter"><option>All records</option><option>Any issue</option><option>Duplicate</option><option>Conflicting ID</option><option>Missing</option><option>Invalid</option></select></label><label>Sort by<select id="sort"></select></label><label>Order<select id="order"><option>Ascending</option><option>Descending</option></select></label><label>ID column<select id="key"></select></label>
+<details><summary>Review suggested column types</summary><div id="types"></div><small>Number checks accept decimals and scientific notation. Dates use YYYY-MM-DD. Set identifier columns to Text to preserve leading zeros.</small></details>
+<p id="counts"></p><div class="scroll" id="grid"></div><p><button id="prev">Previous</button> <span id="page"></span> <button id="next">Next</button></p><button id="dedup">Preview exact duplicate removal</button></section>
+<section><h2>Distribution</h2><label>Measure<select id="measure"></select></label><p id="fences"></p><div id="chart"></div><div id="stats" class="scroll"></div><details><summary>Outlier records</summary><div id="outliers"></div></details></section>
+<section><h2>Export</h2><p id="audit"></p><button id="clean">Download cleaned CSV</button> <button id="log">Download change log</button></section></div></main>
+<dialog id="modal"><form method="dialog"><button>Close</button></form><div id="body"></div></dialog>
+<script>
+const el=id=>document.getElementById(id);
+const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const option=(v,label)=>'<option value="'+esc(v)+'">'+esc(label)+'</option>';
+const table=(headers,body)=>'<table><thead><tr>'+headers.map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+body+'</tbody></table>';
+const cells=values=>values.map(v=>'<td>'+esc(v)+'</td>').join('');
+let headers=[],rows=[],types=[],changes=[],issues=new Map(),duplicates=[],page=0,originalCount=0,name='';
+function parseCSV(source){
+ const s=source.replace(/^\uFEFF/,'');let result=[],row=[],field='',quoted=false,closed=false,started=false;
+ for(let i=0;i<s.length;i++){const c=s[i];
+ if(quoted){if(c!=='"')field+=c;else if(s[i+1]==='"'){field+='"';i++}else{quoted=false;closed=true}continue}
+ if(c===','){row.push(field);field='';closed=false;started=true}
+ else if(c==='\r'||c==='\n'){if(c==='\r'&&s[i+1]==='\n')i++;if(started||row.length||field)result.push([...row,field]);row=[];field='';closed=false;started=false}
+ else if(c==='"'&&!closed&&!field){quoted=true;started=true}
+ else{if(closed||c==='"')throw Error('Unexpected character in a quoted field.');field+=c;started=true}}
+ if(quoted)throw Error('Unclosed quoted field.');if(started||row.length)result.push([...row,field]);return result;
+}
+const isNumber=v=>/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(v.trim())&&Number.isFinite(Number(v));
+const isDate=v=>/^\d{4}-\d\d-\d\d$/.test(v)&&Number.isFinite(Date.parse(v))&&new Date(v).toISOString().slice(0,10)===v;
+function loadCSV(raw,filename){
+ const data=parseCSV(raw);if(!data.length)throw Error('The CSV is empty.');const h=data.shift();
+ data.forEach((r,i)=>{if(r.length>h.length)throw Error('Record '+(i+1)+' has more fields than the header.');while(r.length<h.length)r.push('')});
+ if(changes.length&&!confirm('Replace this dataset? Download your changes first if needed.'))return;
+ headers=h.map((v,i)=>v||'Column '+(i+1));rows=data.map((v,i)=>({id:i+1,v}));changes=[];originalCount=rows.length;name=filename;page=0;
+ const idCol=headers.findIndex(v=>/(^id$|[_ -]id$|Id$)/i.test(v));
+ types=headers.map((_,i)=>{const a=data.map(r=>r[i].trim()).filter(Boolean);if(i===idCol||!a.length)return 'Text';if(a.filter(isDate).length/a.length>=.7)return 'Date';return a.filter(isNumber).length/a.length>=.7?'Number':'Text'});
+ const options=headers.map((v,i)=>option(i,v)).join('');el('sort').innerHTML=option(-1,'Source order')+options;el('key').innerHTML=option(-1,'None')+options;el('key').value=idCol;el('query').value='';el('filter').selectedIndex=0;el('order').selectedIndex=0;
+ el('types').innerHTML=headers.map((h,i)=>'<label>'+esc(h)+'<select data-type="'+i+'">'+['Text','Number','Date'].map(t=>option(t,t)).join('')+'</select></label>').join('');
+ el('types').querySelectorAll('select').forEach((s,i)=>{s.value=types[i];s.onchange=()=>{types[i]=s.value;updateMeasures();refresh()}});
+ updateMeasures();el('work').hidden=false;el('msg').textContent='';refresh();
+}
+function updateMeasures(){const old=el('measure').value;el('measure').innerHTML=headers.map((h,i)=>types[i]==='Number'?option(i,h):'').join('');if(old&&types[+old]==='Number')el('measure').value=old}
+function refresh(){
+ issues=new Map(rows.map(r=>[r.id,[]]));duplicates=[];const seen=new Map(),ids=new Map();const k=+el('key').value;
+ for(const r of rows){const sig=JSON.stringify(r.v);if(seen.has(sig)){duplicates.push(r.id);for(const id of [seen.get(sig),r.id])if(!issues.get(id).includes('Duplicate'))issues.get(id).push('Duplicate')}else seen.set(sig,r.id);
+ if(k>=0&&r.v[k].trim()){const value=r.v[k].trim();if(!ids.has(value))ids.set(value,[]);ids.get(value).push(r)}
+ r.v.forEach((v,c)=>{if(!v.trim())issues.get(r.id).push('Missing · '+headers[c]);else if((types[c]==='Number'&&!isNumber(v))||(types[c]==='Date'&&!isDate(v.trim())))issues.get(r.id).push('Invalid · '+headers[c])})}
+ for(const group of ids.values())if(new Set(group.map(r=>JSON.stringify(r.v))).size>1)for(const r of group)issues.get(r.id).push('Conflicting ID');
+ el('source').textContent=name+' · '+originalCount+' original records · '+headers.length+' columns';
+ el('audit').textContent=changes.length+' logged changes. Exports use all working records. '+(duplicates.length?'Review exact duplicates before exporting.':'');
+ el('clean').disabled=!!duplicates.length;el('dedup').disabled=!duplicates.length;renderGrid();analyze();
+}
+function renderGrid(){const term=el('query').value.toLowerCase(),f=el('filter').value,k=+el('sort').value;
+ const a=rows.filter(r=>r.v.some(v=>v.toLowerCase().includes(term))&&(f==='All records'||(f==='Any issue'?issues.get(r.id).length:issues.get(r.id).some(v=>v.split(' · ')[0]===f))));
+ a.sort((x,y)=>{let cmp=x.id-y.id;if(k>=0){const p=x.v[k],q=y.v[k];if(types[k]==='Number'){const px=isNumber(p),qy=isNumber(q);cmp=px&&qy?Number(p)-Number(q):px!==qy?(px?-1:1):p.localeCompare(q)}else cmp=p.localeCompare(q)}return el('order').selectedIndex?-cmp:cmp});
+ const pages=Math.max(1,Math.ceil(a.length/30));page=Math.max(0,Math.min(page,pages-1));el('page').textContent=(page+1)+' / '+pages;el('prev').disabled=!page;el('next').disabled=page>=pages-1;
+ el('counts').textContent=a.length+' matching / '+rows.length+' working records';
+ el('grid').innerHTML=table(['Record','Issues',...headers],a.slice(page*30,page*30+30).map(r=>'<tr><td><button data-edit="'+r.id+'">Edit #'+r.id+'</button></td>'+cells([issues.get(r.id).join('\n'),...r.v])+'</tr>').join(''));
+}
+function dialog(html){el('body').innerHTML=html;if(!el('modal').open)el('modal').showModal()}
+el('grid').onclick=e=>{if(!e.target.dataset.edit)return;const r=rows.find(r=>r.id===+e.target.dataset.edit);
+ dialog('<h2>Edit record #'+r.id+'</h2>'+headers.map((h,i)=>'<label style="display:block">'+esc(h)+'<textarea data-field>'+esc(r.v[i])+'</textarea></label>').join('')+'<label>Reason<input id="reason"></label><button id="preview">Preview changes</button><p id="hint"></p>');
+ el('preview').onclick=()=>{const reason=el('reason').value.trim(),v=[...el('body').querySelectorAll('[data-field]')].map(t=>t.value);
+ const edits=v.flatMap((n,i)=>n===r.v[i]?[]:[[r.id,headers[i],r.v[i],n,'Manual edit',reason]]);
+ if(!reason||!edits.length){el('hint').textContent='Change a value and enter a reason first.';return}
+ preview(edits,()=>{r.v=v})}}
+const logHeaders=['Source record','Column','Original value','New value','Method','Reason'];
+function preview(edits,apply){dialog('<h2>Review '+edits.length+' change(s)</h2><div class="scroll">'+table(logHeaders,edits.map(e=>'<tr>'+cells(e)+'</tr>').join(''))+'</div><p><button id="apply">Apply changes</button></p>');el('apply').onclick=()=>{apply();for(const e of edits)changes.push(e);el('modal').close();refresh()}}
+el('dedup').onclick=()=>{const remove=new Set(duplicates);const edits=rows.filter(r=>remove.has(r.id)).map(r=>[r.id,'Entire record',JSON.stringify(r.v),'','Exact duplicate rule','All fields match an earlier record']);preview(edits,()=>{rows=rows.filter(r=>!remove.has(r.id))})};
+const quant=(a,p)=>{const t=(a.length-1)*p,i=Math.floor(t);return a[i]+(a[Math.ceil(t)]-a[i])*(t-i)};
+const fmt=n=>typeof n==='number'?Number(n.toPrecision(8)).toString():n;
+function summary(a){if(!a.length)return [0,0,...Array(7).fill('—')];const total=a.reduce((s,n)=>s+n,0),mean=total/a.length,m=new Map();let highest=0;for(const n of a){const count=(m.get(n)||0)+1;m.set(n,count);highest=Math.max(count,highest)}
+ return [a.length,total,mean,quant(a,.5),highest===1?'No repeated value':[...m].filter(x=>x[1]===highest).map(x=>fmt(x[0])).join(', '),a[0],a.at(-1),a.at(-1)-a[0],Math.sqrt(a.reduce((s,n)=>s+(n-mean)**2,0)/a.length)]}
+function analyze(){const col=el('measure').value;const valid=col===''?[]:rows.filter(r=>isNumber(r.v[col]));const a=valid.map(r=>Number(r.v[col])).sort((x,y)=>x-y);
+ el('chart').innerHTML='';el('stats').innerHTML='';el('outliers').textContent='';if(!a.length){el('fences').textContent='Choose a column typed as Number with at least one numeric value.';return}
+ const q1=quant(a,.25),q3=quant(a,.75),d=1.5*(q3-q1),lo=q1-d,hi=q3+d;const inside=n=>n>=lo&&n<=hi;
+ const out=valid.filter(r=>!inside(Number(r.v[col])));el('outliers').textContent=out.map(r=>'#'+r.id+' ('+r.v[col]+')').join(', ')||'None';
+ el('fences').textContent='All working records · '+(rows.length-valid.length)+' missing or invalid values excluded. Inclusive Q1 = '+fmt(q1)+', Q3 = '+fmt(q3)+'. Fixed fences: '+fmt(lo)+' to '+fmt(hi)+'.';
+ const labels=['Count','Total','Mean','Median','Mode','Minimum','Maximum','Range','Population SD'];const all=summary(a),kept=summary(a.filter(inside));
+ el('stats').innerHTML=table(['Statistic','All numeric values','Without outliers'],labels.map((h,i)=>'<tr>'+cells([h,fmt(all[i]),fmt(kept[i])])+'</tr>').join(''));
+ const nBins=a[0]===a.at(-1)?1:Math.min(8,Math.ceil(Math.sqrt(a.length))),bins=Array(nBins).fill(0),width=(a.at(-1)-a[0])/nBins;
+ for(const v of a)bins[width?Math.min(nBins-1,Math.floor((v-a[0])/width)):0]++;
+ el('chart').innerHTML='<h3>Value distribution</h3>'+table(['Interval','Frequency'],bins.map((n,i)=>'<tr>'+cells(['['+fmt(a[0]+i*width)+', '+fmt(a[0]+(i+1)*width)+(i===nBins-1?']':')')])+'<td><span class="bar" style="width:'+70*n/Math.max(...bins)+'%"></span> '+n+'</td></tr>').join(''))}
+function download(filename,data){const csv=data.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n');const url=URL.createObjectURL(new Blob(['\uFEFF',csv],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+el('clean').onclick=()=>download('cleaned.csv',[headers,...rows.map(r=>r.v)]);el('log').onclick=()=>download('change-log.csv',[logHeaders,...changes]);
+el('file').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{loadCSV(await f.text(),f.name)}catch(err){el('msg').textContent=err.message}e.target.value=''};
+el('demo').onclick=()=>loadCSV('ID,Amount,Status,Notes\nA,10,Complete,Sample purchase\nA,10,Complete,Sample purchase\nB,12,Complete,Standard\nC,11,Pending,Awaiting approval\nC,13,Complete,Check source\nD,12,Complete,Standard\nE,100,Complete,Review amount\nF,pending,Pending,Amount unconfirmed\nG,,Pending,Awaiting amount','Practice ledger');
+for(const id of ['query','filter','sort','order'])el(id).oninput=()=>{page=0;renderGrid()};el('key').onchange=refresh;el('measure').onchange=analyze;el('prev').onclick=()=>{page--;renderGrid()};el('next').onclick=()=>{page++;renderGrid()};
+</script></html>
