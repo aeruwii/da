@@ -1,8 +1,8 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Data Detectives · CSV Workbench</title>
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CSV Workbench</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f4f4ed;color:#172e31;font:16px/1.5 system-ui}main{max-width:1150px;margin:auto;padding:32px 4vw}header{background:#173b3c;color:white;padding:38px;border-radius:18px}h1{font:clamp(36px,6vw,64px)/1.05 Georgia;margin:8px 0 16px}h2{font:30px Georgia;margin:0 0 12px}section{background:white;padding:22px;margin:16px 0;border:1px solid #d4dfd9;border-radius:14px}input,select,button,textarea{font:inherit;max-width:100%;padding:7px 10px;border:1px solid #9baea7;border-radius:6px}button{background:#e1eee4;color:#163c35;cursor:pointer}button:hover{background:#c7e0ce}label{display:inline-grid;gap:3px;margin:3px 8px 8px 0;font-size:14px}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:8px;border-bottom:1px solid #dce3de;vertical-align:top;white-space:pre-wrap;overflow-wrap:anywhere}th{background:#eef3ec}.scroll{overflow:auto;max-height:55vh}#grid td{min-width:95px}.bar{background:#348070;height:14px;border-radius:3px;display:inline-block}small{color:#49665d}dialog{width:min(620px,94vw);border:1px solid #bccbc6;border-radius:12px}textarea{display:block;width:100%;min-height:75px}#msg{color:#ffd898}button:disabled{opacity:.55}
 
-/* Added Group By + Google Sheets formula helper */
+/* Grouping and spreadsheet-formula controls */
 .group-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
 .group-controls label{min-width:145px;flex:1 1 160px}
 .group-controls input,.group-controls select{width:100%}
@@ -15,30 +15,31 @@
 .group-hint{color:#426259;font-size:14px;margin:8px 0}
 .group-toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
 #groupMsg{min-height:1.5em;color:#16644a;font-size:14px}
-</style><main><header>Data Detectives / TGF<h1>CSV Workbench</h1><p>Open a CSV to inspect records, review changes and compare statistics.</p><input id="file" type="file" accept=".csv,text/csv" aria-label="Open CSV"> <button id="demo">Try sample data</button><div id="msg" role="status"></div></header>
+</style><main><header><h1>CSV Workbench</h1><p>Open a CSV to inspect records, review changes and compare statistics.</p><input id="file" type="file" accept=".csv,text/csv" aria-label="Open CSV"> <button id="demo">Try sample data</button><div id="msg" role="status"></div></header>
 <div id="work" hidden><section><h2>Records</h2><p id="source"></p><label>Search all fields<input id="query" type="search"></label><label>Show<select id="filter"><option>All records</option><option>Any issue</option><option>Duplicate</option><option>Conflicting ID</option><option>Missing</option><option>Invalid</option></select></label><label>Sort by<select id="sort"></select></label><label>Order<select id="order"><option>Ascending</option><option>Descending</option></select></label><label>ID column<select id="key"></select></label>
 <details><summary>Review suggested column types</summary><div id="types"></div><small>Number checks accept decimals and scientific notation. Dates use YYYY-MM-DD. Set identifier columns to Text to preserve leading zeros.</small></details>
 <p id="counts"></p><div class="scroll" id="grid"></div><p><button id="prev">Previous</button> <span id="page"></span> <button id="next">Next</button></p><button id="dedup">Preview exact duplicate removal</button></section>
 <section><h2>Distribution</h2><label>Measure<select id="measure"></select></label><p id="fences"></p><div id="chart"></div><div id="stats" class="scroll"></div><details><summary>Outlier records</summary><div id="outliers"></div></details></section>
 
-<section id="groupSection"><h2>Group By · Compare sites and habitats</h2>
-<p class="group-hint">Group rows, add up a numeric column, and copy short formulas for Google Sheets. The calculation uses your loaded CSV; the formula uses your own sheet name and row numbers.</p>
+<section id="groupSection"><h2>Group By · Summary &amp; formulas</h2>
+<p class="group-hint">Group CSV records by any column, calculate totals, counts or averages, and generate reusable Google Sheets formulas.</p>
 <div class="group-controls">
 <label>Group rows by<select id="groupField"></select></label>
 <label>Measure<select id="groupMeasure"></select></label>
 <label>Calculate<select id="groupOp"><option value="sum">SUM · Total</option><option value="count">COUNT · Records</option><option value="avg">AVERAGE · Mean</option></select></label>
-<label>Only system<select id="groupSystem"><option value="">All systems</option></select></label>
+<label>Filter column<select id="groupFilterField"><option value="">No filter</option></select></label>
+<label>Filter value<select id="groupFilterValue"><option value="">All values</option></select></label>
 <label>Order<select id="groupOrder"><option value="asc">Smallest first</option><option value="desc">Largest first</option></select></label>
 </div>
 <div class="group-controls">
-<label>Google Sheets source tab<input id="formulaSheet" type="text" value="Home_Location" placeholder="Home_Location"></label>
-<label>First data row in Sheets<input id="formulaStart" type="number" min="1" value="3"></label>
+<label>Google Sheets source tab<input id="formulaSheet" type="text" value="Sheet1" placeholder="Sheet1"></label>
+<label>First data row in Sheets<input id="formulaStart" type="number" min="1" value="2"></label>
 <label>Formula separator<select id="formulaSeparator"><option value=";">Semicolon ;</option><option value=",">Comma ,</option></select></label>
 </div>
 <p id="groupNote" class="group-hint"></p>
 <div id="groupGrid"></div>
 <p class="group-toolbar"><button id="copyAllGroup">Copy all group formulas</button><button id="downloadGroup">Download group summary CSV</button><span id="groupMsg" aria-live="polite"></span></p>
-<details><summary>How to use these formulas in Questions</summary><p>For Q3 select <strong>HabitatType</strong> → <strong>CurrentPopulation</strong> → <strong>SUM</strong> → <strong>Alpha Centauri</strong>. For Q4 select <strong>ParentSiteID</strong> → <strong>ResidentCapacity</strong> → <strong>SUM</strong> → <strong>All systems</strong>. Tap <strong>Copy formula</strong> on a row and paste into your Questions tab. Set the source tab name and starting row to match your Google Sheet.</p><p>The formula is a separate, verifiable calculation in Google Sheets, so your professor can inspect it. Results in this tool alone do not place formulas into your assignment.</p></details>
+<details><summary>How to use these formulas</summary><p>Choose a grouping column, a numeric measure (unless using COUNT), and an operation. Optionally filter the data by another column. Use <strong>Copy formula</strong> to paste the result into Google Sheets. Enter the tab name and first data row so the generated formulas reference the correct cells.</p></details>
 </section>
 <section><h2>Export</h2><p id="audit"></p><button id="clean">Download cleaned CSV</button> <button id="log">Download change log</button></section></div></main>
 <dialog id="modal"><form method="dialog"><button>Close</button></form><div id="body"></div></dialog>
@@ -120,42 +121,52 @@ function analyze(){const col=el('measure').value;const valid=col===''?[]:rows.fi
 let groupResults=[];
 const sourceColumn=i=>{let s='';for(let j=i+1;j;j=Math.floor((j-1)/26))s=String.fromCharCode(65+(j-1)%26)+s;return s};
 const formulaRef=(column,first,last)=>{
- const s=el('formulaSheet').value.trim()||'Home_Location',safe=s.replace(/'/g,"''");
+ const s=el('formulaSheet').value.trim()||'Sheet1',safe=s.replace(/'/g,"''");
  const q=/^[A-Za-z_][A-Za-z0-9_]*$/.test(s)?s:"'"+safe+"'";
  return q+'!'+sourceColumn(column)+first+':'+sourceColumn(column)+last;
 };
 const quoteArg=v=>'"'+String(v).replaceAll('"','""')+'"';
 function groupFormula(group){
- const g=+el('groupField').value,m=+el('groupMeasure').value,op=el('groupOp').value,sys=el('groupSystem').value;
- const first=Math.max(1,Math.floor(Number(el('formulaStart').value)||3)),last=first+originalCount-1;
+ const g=+el('groupField').value,m=+el('groupMeasure').value,op=el('groupOp').value;
+ const fi=el('groupFilterField').value===''?-1:+el('groupFilterField').value;
+ const fv=el('groupFilterValue').value;
+ const first=Math.max(1,Math.floor(Number(el('formulaStart').value)||2)),last=first+originalCount-1;
  const sep=el('formulaSeparator').value;
- const gr=formulaRef(g,first,last),mr=formulaRef(m,first,last),cr=quoteArg(group),si=headers.indexOf('System');
- if(op==='count')return sys&&si>=0?'=COUNTIFS('+[gr,cr,formulaRef(si,first,last),quoteArg(sys)].join(sep)+')':'=COUNTIF('+[gr,cr].join(sep)+')';
- if(op==='avg')return sys&&si>=0?'=AVERAGEIFS('+[mr,gr,cr,formulaRef(si,first,last),quoteArg(sys)].join(sep)+')':'=AVERAGEIF('+[gr,cr,mr].join(sep)+')';
- return sys&&si>=0?'=SUMIFS('+[mr,gr,cr,formulaRef(si,first,last),quoteArg(sys)].join(sep)+')':'=SUMIF('+[gr,cr,mr].join(sep)+')';
+ const gr=formulaRef(g,first,last),mr=formulaRef(m,first,last),cr=quoteArg(group);
+ const extra=fi>=0&&fv!==''?[formulaRef(fi,first,last),quoteArg(fv)]:[];
+ if(op==='count')return extra.length?'=COUNTIFS('+[gr,cr,...extra].join(sep)+')':'=COUNTIF('+[gr,cr].join(sep)+')';
+ if(op==='avg')return extra.length?'=AVERAGEIFS('+[mr,gr,cr,...extra].join(sep)+')':'=AVERAGEIF('+[gr,cr,mr].join(sep)+')';
+ return extra.length?'=SUMIFS('+[mr,gr,cr,...extra].join(sep)+')':'=SUMIF('+[gr,cr,mr].join(sep)+')';
+}
+function updateGroupFilterValues(){
+ const selected=el('groupFilterValue').value,field=el('groupFilterField').value;
+ const values=field===''?[]:[...new Set(rows.map(r=>r.v[+field]).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+ el('groupFilterValue').innerHTML=option('','All values')+values.map(v=>option(v,v)).join('');
+ el('groupFilterValue').value=values.includes(selected)?selected:'';
 }
 function initGroups(){
- const all=headers.map((h,i)=>option(i,h)).join('');el('groupField').innerHTML=all;
+ const all=headers.map((h,i)=>option(i,h)).join('');
+ el('groupField').innerHTML=all;
  el('groupMeasure').innerHTML=headers.map((h,i)=>types[i]==='Number'?option(i,h):'').join('');
- const sys=headers.indexOf('System');
- const systems=sys<0?[]:[...new Set(rows.map(r=>r.v[sys]).filter(Boolean))].sort();
- el('groupSystem').innerHTML=option('','All systems')+systems.map(s=>option(s,s)).join('');
- let group=headers.indexOf('ParentSiteID');if(group<0)group=headers.indexOf('HabitatType');
- el('groupField').value=String(Math.max(0,group));
- let metric=headers.indexOf('ResidentCapacity');if(metric<0||types[metric]!=='Number')metric=types.indexOf('Number');
+ el('groupFilterField').innerHTML=option('','No filter')+all;
+ el('groupFilterField').value='';updateGroupFilterValues();
+ const group=types.findIndex(t=>t==='Text');
+ el('groupField').value=String(group>=0?group:0);
+ const metric=types.indexOf('Number');
  if(metric>=0)el('groupMeasure').value=String(metric);
  el('groupMsg').textContent='';renderGroups();
 }
 function renderGroups(){
  if(el('work').hidden||!headers.length)return;
- const g=+el('groupField').value,m=+el('groupMeasure').value,op=el('groupOp').value,si=headers.indexOf('System'),sys=el('groupSystem').value;
+ const g=+el('groupField').value,m=+el('groupMeasure').value,op=el('groupOp').value;
+ const fi=el('groupFilterField').value===''?-1:+el('groupFilterField').value,fv=el('groupFilterValue').value;
  const numberIndex=[...el('groupMeasure').options].map(o=>+o.value);
  if(op!=='count'&&!numberIndex.includes(m)){
   el('groupGrid').innerHTML='<p class="group-hint">Choose a numeric measure, or choose COUNT.</p>';el('copyAllGroup').disabled=true;el('downloadGroup').disabled=true;return;
  }
  const grouped=new Map();
  for(const row of rows){
-  if(si>=0&&sys&&row.v[si]!==sys)continue;
+  if(fi>=0&&fv!==''&&row.v[fi]!==fv)continue;
   const key=row.v[g].trim();if(!key)continue;
   if(!grouped.has(key))grouped.set(key,{key,values:[],count:0});
   const item=grouped.get(key);item.count++;
@@ -164,7 +175,7 @@ function renderGroups(){
  groupResults=[...grouped.values()].map(x=>({name:x.key,count:x.count,value:op==='count'?x.count:op==='avg'?(x.values.length?x.values.reduce((a,b)=>a+b,0)/x.values.length:null):x.values.reduce((a,b)=>a+b,0)}));
  groupResults.sort((a,b)=>((a.value??Infinity)-(b.value??Infinity))*(el('groupOrder').value==='desc'?-1:1)||a.name.localeCompare(b.name));
  const heading=op==='count'?'Record count':(op==='avg'?'Average ':'Total ')+(headers[m]||'measure');
- el('groupNote').textContent=groupResults.length+' non-blank groups · '+rows.length+' working records · '+(sys?('System: '+sys):'All systems')+'. Source Google Sheet rows are computed from the CSV row count; adjust the first row if needed.';
+ el('groupNote').textContent=groupResults.length+' non-blank groups · '+rows.length+' working records · '+(fi>=0&&fv!==''?(headers[fi]+': '+fv):'No filter')+'. Sheet ranges use the CSV row count; adjust the first row as needed.';
  el('groupGrid').innerHTML=groupResults.length?table([headers[g],heading,'Google Sheets formula'],groupResults.map((it,i)=>'<tr><td>'+esc(it.name)+'</td><td>'+esc(it.value===null?'—':fmt(it.value))+'</td><td><button data-copy-group="'+i+'">Copy formula</button><div class="formula-line">'+esc(groupFormula(it.name))+'</div></td></tr>').join('')):'<p class="group-hint">No matching groups. Change your filter.</p>';
  el('copyAllGroup').disabled=!groupResults.length;el('downloadGroup').disabled=!groupResults.length;
 }
@@ -181,7 +192,8 @@ el('groupGrid').addEventListener('click',e=>{
 });
 el('copyAllGroup').onclick=()=>copyGroup(groupResults.map(r=>r.name+'\t'+groupFormula(r.name)).join('\n'));
 el('downloadGroup').onclick=()=>download('group-summary.csv',[[headers[+el('groupField').value],'Result','Google Sheets formula'],...groupResults.map(r=>[r.name,r.value===null?'':r.value,groupFormula(r.name)])]);
-for(const id of ['groupField','groupMeasure','groupOp','groupSystem','groupOrder','formulaSheet','formulaStart','formulaSeparator'])el(id).addEventListener('input',()=>{el('groupMsg').textContent='';renderGroups()});
+el('groupFilterField').addEventListener('change',()=>{updateGroupFilterValues();el('groupMsg').textContent='';renderGroups()});
+for(const id of ['groupField','groupMeasure','groupOp','groupFilterValue','groupOrder','formulaSheet','formulaStart','formulaSeparator'])el(id).addEventListener('input',()=>{el('groupMsg').textContent='';renderGroups()});
 
 function download(filename,data){const csv=data.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n');const url=URL.createObjectURL(new Blob(['\uFEFF',csv],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 el('clean').onclick=()=>download('cleaned.csv',[headers,...rows.map(r=>r.v)]);el('log').onclick=()=>download('change-log.csv',[logHeaders,...changes]);
