@@ -42,13 +42,14 @@
 @media(max-width:700px){.interest-feature,.three-sides,.roadmap{grid-template-columns:1fr}.mini-grid{grid-template-columns:1fr}.interest-number{border-left:0;border-top:1px solid #3b3038;padding:25px 0 0}.learning-list>div{grid-template-columns:50px 1fr}.learning-list p{grid-column:2}.side{min-height:190px}}
 #data-detectives .title{font-size:clamp(2.5rem,7.6vw,6.8rem);line-height:1.04}
 #data-detectives .script{text-transform:none}
-.dd-resources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:clamp(28px,5vw,60px)}
+.dd-resources{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:clamp(28px,5vw,60px)}
 .dd-resource{position:relative;display:grid;align-content:end;gap:7px;min-height:154px;padding:24px 54px 24px 24px;border:1px solid #785969;color:#fff;background:#191317;border-radius:16px}
 .dd-resource:first-child{background:var(--p);color:#180d13;border-color:var(--p)}
 .dd-resource strong{font-size:clamp(20px,2vw,28px);line-height:1.15}
 .dd-resource span{font-size:14px;line-height:1.45}
 .dd-resource b{position:absolute;top:16px;right:18px;font-size:24px}
 .dd-resource:hover strong,.dd-resource:focus-visible strong{text-decoration:underline}
+@media(max-width:950px){.dd-resources{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:650px){.dd-resources{grid-template-columns:1fr}.dd-resource{min-height:116px}}
 
 .dd-link{color:var(--p);font-size:12px;margin-left:auto;padding:8px}
@@ -81,6 +82,9 @@
   <div class="dd-resources">
     <a class="dd-resource" href="./data.html">
       <strong>CSV Workbench</strong><span>Explore records, review changes and compare statistics.</span><b aria-hidden="true">↗</b>
+    </a>
+    <a class="dd-resource" href="./tool.html">
+      <strong>Cipher Lab</strong><span>Encrypt and decrypt messages with Vigenère, AES-256-GCM and Atbash.</span><b aria-hidden="true">↗</b>
     </a>
     <a class="dd-resource" href="https://drive.google.com/drive/folders/1RBXkCQ9p-fXGHlvdOC7mDTMGo8zCYg_A">
       <strong>Google Drive folder</strong><span>View the project files and assignment documentation.</span><b aria-hidden="true">↗</b>
